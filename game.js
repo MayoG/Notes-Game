@@ -13,7 +13,12 @@ class NoteGame {
     }
 
     newNote() {
-        this.currentNote = this.notes[Math.floor(Math.random() * this.notes.length)];
+        let newNote;
+        do {
+            newNote = this.notes[Math.floor(Math.random() * this.notes.length)];
+        } while (newNote === this.currentNote);
+        
+        this.currentNote = newNote;
         this.renderNote();
     }
 
