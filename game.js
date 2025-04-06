@@ -2,6 +2,7 @@ class NoteGame {
     constructor() {
         this.notes = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
         this.currentNote = '';
+        this.correctStreak = 0;  
         this.setupEventListeners();
         this.newNote();
     }
@@ -65,10 +66,11 @@ class NoteGame {
         voice.draw(context, stave);
     }
 
-    checkAnswer(selectedNote) {
+    checkAnswer(userNote) {
         const messageDiv = document.getElementById('message');
         
-        if (selectedNote === this.currentNote) {
+        if (userNote === this.currentNote) {
+            this.correctStreak++;
             messageDiv.textContent = 'Correct!';
             messageDiv.classList.add('visible');
             messageDiv.classList.remove('hidden');
@@ -80,6 +82,7 @@ class NoteGame {
                 messageDiv.classList.remove('visible');
             }, 500); // Shorter duration for the message
         } else {
+            this.correctStreak = 0;
             messageDiv.textContent = 'Try again!';
             messageDiv.classList.add('visible');
             messageDiv.classList.remove('hidden');
@@ -88,6 +91,14 @@ class NoteGame {
                 messageDiv.classList.add('hidden');
                 messageDiv.classList.remove('visible');
             }, 1000);
+        }
+        this.updateStreakDisplay();
+    }
+
+    updateStreakDisplay() {
+        const streakElement = document.getElementById('streak');
+        if (streakElement) {
+            streakElement.textContent = `Streak: ${this.correctStreak}`;
         }
     }
 }

@@ -95,3 +95,11 @@ h1 {
 .note-button:hover {
     background-color: #45a049;
 }
+
+.streak {
+    font-size: 1.2em;
+    color: #4CAF50;
+    margin-top: 10px;
+    text-align: center;
+    font-weight: bold;
+}
