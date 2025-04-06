@@ -3,8 +3,19 @@ class NoteGame {
         this.notes = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
         this.currentNote = '';
         this.correctStreak = 0;  
+        this.bestScore = this.loadBestScore();
         this.setupEventListeners();
         this.newNote();
+        this.updateStreakDisplay();
+    }
+
+    loadBestScore() {
+        const savedScore = localStorage.getItem('bestScore');
+        return savedScore ? parseInt(savedScore) : 0;
+    }
+
+    saveBestScore() {
+        localStorage.setItem('bestScore', this.bestScore);
     }
 
     setupEventListeners() {
@@ -71,24 +82,23 @@ class NoteGame {
         
         if (userNote === this.currentNote) {
             this.correctStreak++;
+            if (this.correctStreak > this.bestScore) {
+                this.bestScore = this.correctStreak;
+                this.saveBestScore();
+            }
             messageDiv.textContent = 'Correct!';
             messageDiv.classList.add('visible');
             messageDiv.classList.remove('hidden');
-            
-            // Show new note immediately
-            this.newNote();
             setTimeout(() => {
-                messageDiv.classList.add('hidden');
                 messageDiv.classList.remove('visible');
-            }, 500); // Shorter duration for the message
+                this.newNote();
+            }, 500);
         } else {
             this.correctStreak = 0;
             messageDiv.textContent = 'Try again!';
             messageDiv.classList.add('visible');
             messageDiv.classList.remove('hidden');
-            
             setTimeout(() => {
-                messageDiv.classList.add('hidden');
                 messageDiv.classList.remove('visible');
             }, 1000);
         }
@@ -97,8 +107,14 @@ class NoteGame {
 
     updateStreakDisplay() {
         const streakElement = document.getElementById('streak');
+        const bestScoreElement = document.getElementById('best-score');
+        
         if (streakElement) {
             streakElement.textContent = `Streak: ${this.correctStreak}`;
+        }
+        
+        if (bestScoreElement) {
+            bestScoreElement.textContent = `Best: ${this.bestScore}`;
         }
     }
 }
