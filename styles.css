@@ -31,6 +31,20 @@ h1 {
     margin-bottom: 2rem;
 }
 
+.staff-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+#treble-staff, #bass-staff {
+    width: 100%;
+    max-width: 420px;
+    max-height: 120px;
+}
+
 #staff {
     margin: 2rem auto;
     background-color: #fff;

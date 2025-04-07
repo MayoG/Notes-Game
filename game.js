@@ -36,45 +36,59 @@ class NoteGame {
 
     renderNote() {
         const VF = VexFlow;
-        
-        // Clear previous rendering
-        const staffContainer = document.getElementById('staff');
-        staffContainer.innerHTML = '';
-        
-        const renderer = new VF.Renderer(staffContainer, VF.Renderer.Backends.SVG);
-        renderer.resize(500, 200);
-        const context = renderer.getContext();
-        
-        // Create staff with treble clef
-        const stave = new VF.Stave(10, 40, 400);
-        stave.addClef('treble');
-        stave.setContext(context).draw();
+        // Clear previous staff
+        const trebleStaffContainer = document.getElementById('treble-staff');
+        const bassStaffContainer = document.getElementById('bass-staff');
+        trebleStaffContainer.innerHTML = '';
+        bassStaffContainer.innerHTML = '';
 
-        const octave = Math.random() < 0.5 ? 4 : 5;
-    
-        // Create a single quarter note
+        // Set up renderer for both staves
+        const trebleRenderer = new VF.Renderer(trebleStaffContainer, VF.Renderer.Backends.SVG);
+        const bassRenderer = new VF.Renderer(bassStaffContainer, VF.Renderer.Backends.SVG);
+        
+        // Resize both renderers
+        trebleRenderer.resize(500, 200);
+        bassRenderer.resize(500, 200);
+        
+        const trebleContext = trebleRenderer.getContext();
+        const bassContext = bassRenderer.getContext();
+        
+        // Create treble staff with treble clef
+        const trebleStave = new VF.Stave(10, 40, 400);
+        trebleStave.addClef('treble');
+        trebleStave.setContext(trebleContext).draw();
+
+        // Create bass staff with bass clef
+        const bassStave = new VF.Stave(10, 40, 400);
+        bassStave.addClef('bass');
+        bassStave.setContext(bassContext).draw();
+
+        // Randomly choose which staff to show the note
+        const showOnTreble = Math.random() < 0.5;
+        const octave = showOnTreble ? [4, 5][Math.floor(Math.random() * 2)] : [2, 3][Math.floor(Math.random() * 2)];
+        
+        // Create the note
         const note = new VF.StaveNote({
-            clef: 'treble',
+            clef: showOnTreble ? 'treble' : 'bass',
             keys: [`${this.currentNote}/${octave}`],
             duration: 'q'
         });
-    
-        // Create voice for 1/4 time (1 beat total)
+        
+        // Create voice
         const voice = new VF.Voice({
             num_beats: 1,
             beat_value: 4,
             resolution: VF.RESOLUTION
         });
-
+        
         voice.setStrict(false);
     
         voice.addTickable(note);
-    
-        // Format and justify the note in the stave
-        new VF.Formatter().joinVoices([voice]).format([voice], 400);
-    
-        // Draw voice
-        voice.draw(context, stave);
+        
+        // Format and draw the note
+        const formatter = new VF.Formatter().joinVoices([voice]).format([voice], 400);
+        formatter.formatToStave([voice], showOnTreble ? trebleStave : bassStave);
+        voice.draw(showOnTreble ? trebleContext : bassContext, showOnTreble ? trebleStave : bassStave);
     }
 
     checkAnswer(userNote) {
