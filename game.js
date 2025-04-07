@@ -110,30 +110,52 @@ class NoteGame {
 
     checkAnswer(userNote) {
         const messageDiv = document.getElementById('message');
+        const button = document.querySelector(`[data-note="${userNote}"]`);
         
         if (userNote === this.currentNote) {
             this.correctStreak++;
-            if (this.correctStreak > this.bestScore) {
-                this.bestScore = this.correctStreak;
-                this.saveBestScore();
-            }
+            this.bestScore = Math.max(this.bestScore, this.correctStreak);
+            this.saveBestScore();
+            
             messageDiv.textContent = 'Correct!';
             messageDiv.classList.add('visible');
             messageDiv.classList.remove('hidden');
-            setTimeout(() => {
-                messageDiv.classList.remove('visible');
-                this.newNote();
-            }, 500);
+            
+            // Add correct animation
+            if (button) {
+                button.classList.add('correct');
+                setTimeout(() => {
+                    messageDiv.classList.remove('visible');
+                    button.classList.remove('correct');
+                    this.newNote();
+                }, 500);
+            }
         } else {
             this.correctStreak = 0;
+            
             messageDiv.textContent = 'Try again!';
             messageDiv.classList.add('visible');
             messageDiv.classList.remove('hidden');
-            setTimeout(() => {
-                messageDiv.classList.remove('visible');
-            }, 1000);
+            
+            // Add wrong animation
+            if (button) {
+                button.classList.add('wrong');
+                setTimeout(() => {
+                    button.classList.remove('wrong');
+                    messageDiv.classList.remove('visible');
+                }, 500);
+            }
         }
+
+        // Update streak display
         this.updateStreakDisplay();
+
+        // Generate new note after a short delay
+        // setTimeout(() => {
+        //     this.newNote();
+        //     messageDiv.classList.add('hidden');
+        //     messageDiv.classList.remove('visible');
+        // }, 1000);
     }
 
     updateStreakDisplay() {

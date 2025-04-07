@@ -90,24 +90,80 @@ h1 {
 }
 
 .note-button {
-    padding: 1rem 2rem;
+    padding: 1rem 1.3rem;
     font-size: 1.2rem;
-    background-color: #4CAF50;
+    min-width: 75px;
+    background: linear-gradient(145deg, #4CAF50, #45a049);
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: all 0.3s ease;
     flex: 1;
-    min-width: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.note-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.2),
+        transparent
+    );
+    transition: 0.5s;
 }
 
 .note-button:hover {
-    background-color: #45a049;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.note-button:hover::before {
+    left: 100%;
+}
+
+.note-button:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.note-button.correct {
+    background: linear-gradient(145deg, #4CAF50, #3d8b40);
+    animation: correctBounce 0.3s ease-out;
+}
+
+.note-button.wrong {
+    background: linear-gradient(145deg, #f44336, #e53935);
+    animation: wrongShake 0.3s ease-out;
+}
+
+@keyframes correctBounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+@keyframes wrongShake {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(-5px);
+    }
+    75% {
+        transform: translateX(5px);
+    }
 }
 
 .score-container {
