@@ -214,7 +214,6 @@ h1 {
 }
 
 .hint-image {
-    display: none;
     width: 500px;
     height: auto;
     max-height: 500px;
@@ -226,10 +225,46 @@ h1 {
     left: 50%;
     top: 100%;
     transform: translateX(-50%) translateY(10px);
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
 }
 
 .hint-image.visible {
     display: block;
+    opacity: 1;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(10px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(10px) scale(1);
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: translateX(-50%) translateY(10px) scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(-50%) translateY(10px) scale(0.95);
+    }
+}
+
+.hint-image.visible {
+    display: block;
+    opacity: 1;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.hint-image {
+    opacity: 0;
+    animation: fadeOut 0.3s ease-in-out;
 }
 
 #marksImage {

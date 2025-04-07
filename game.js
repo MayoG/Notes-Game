@@ -4,7 +4,7 @@ class NoteGame {
         this.currentNote = '';
         this.correctStreak = 0;  
         this.bestScore = this.loadBestScore();
-        this.isHintVisible = false;
+        this.isHintVisible = true;
         this.setupEventListeners();
         this.newNote();
         this.updateStreakDisplay();
@@ -165,12 +165,6 @@ class NoteGame {
         // Update streak display
         this.updateStreakDisplay();
 
-        // Generate new note after a short delay
-        // setTimeout(() => {
-        //     this.newNote();
-        //     messageDiv.classList.add('hidden');
-        //     messageDiv.classList.remove('visible');
-        // }, 1000);
     }
 
     updateStreakDisplay() {
