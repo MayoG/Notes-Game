@@ -4,12 +4,19 @@ class NoteGame {
         this.currentNote = '';
         this.correctStreak = 0;  
         this.bestScore = this.loadBestScore();
+        this.isHintVisible = false;
         this.setupEventListeners();
         this.newNote();
         this.updateStreakDisplay();
         
         // Add keyboard event listener
         document.addEventListener('keydown', (event) => this.handleKeyboard(event));
+        
+        // Add hint button event listener
+        const hintButton = document.getElementById('hintButton');
+        if (hintButton) {
+            hintButton.addEventListener('click', () => this.toggleHint());
+        }
     }
 
     loadBestScore() {
@@ -105,6 +112,14 @@ class NoteGame {
         // Check if it's a valid note
         if (this.notes.includes(note)) {
             this.checkAnswer(note);
+        }
+    }
+
+    toggleHint() {
+        const hintImage = document.getElementById('hintImage');
+        if (hintImage) {
+            this.isHintVisible = !this.isHintVisible;
+            hintImage.classList.toggle('visible', this.isHintVisible);
         }
     }
 
