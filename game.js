@@ -7,6 +7,9 @@ class NoteGame {
         this.setupEventListeners();
         this.newNote();
         this.updateStreakDisplay();
+        
+        // Add keyboard event listener
+        document.addEventListener('keydown', (event) => this.handleKeyboard(event));
     }
 
     loadBestScore() {
@@ -89,6 +92,20 @@ class NoteGame {
         const formatter = new VF.Formatter().joinVoices([voice]).format([voice], 400);
         formatter.formatToStave([voice], showOnTreble ? trebleStave : bassStave);
         voice.draw(showOnTreble ? trebleContext : bassContext, showOnTreble ? trebleStave : bassStave);
+    }
+
+    handleKeyboard(event) {
+        // Prevent default behavior for space and arrow keys
+        if (event.key === ' ' || event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+            event.preventDefault();
+        }
+
+        let note = event.key.toUpperCase();
+
+        // Check if it's a valid note
+        if (this.notes.includes(note)) {
+            this.checkAnswer(note);
+        }
     }
 
     checkAnswer(userNote) {
